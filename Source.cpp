@@ -1,71 +1,112 @@
 #include <algorithm>
 #include <iostream>
 #include <array>
+#include <vector>
 
-class Sin;
-class Cos;
 
-template<int A, class Type>
-struct AngleFinder;
+#include "Timer.h"
+#include "Angles.hpp"
 
-template<int A>
-struct AngleFinder<A, Sin>
+static LARGE_INTEGER qpc_freq;
+static LARGE_INTEGER qpc_begin;
+static LARGE_INTEGER qpc_end;
+static double timer_multiplier;
+
+class testing
 {
-	const float value = sinf(static_cast<float>(A));
-	float operator()() const { return value; }
+public:
+	unsigned long long value = Factorial<40>::result;
 };
 
-template<int A>
-struct AngleFinder<A, Cos>
+void TimerFunc(double& timeSave, double (*func)(int))
 {
-	const float value = cosf(static_cast<float>(A));
-	float operator()() const { return value; }
-};
+	constexpr int J_VALUE = 10000;
+	constexpr int I_VALUE = 360;
+	std::vector<double> localVec(J_VALUE * I_VALUE);
+	QueryPerformanceCounter(&qpc_begin);
+	for(int j = 0; j < J_VALUE; ++j)
+	{
+		for (int i = 0; i < I_VALUE; ++i)
+		{
+			localVec.emplace_back(func(i));
+		}
+	}
+	QueryPerformanceCounter(&qpc_end);
+	localVec.clear();
+	timeSave = (double)(qpc_end.QuadPart - qpc_begin.QuadPart) / timer_multiplier;
+}
 
-
-template <size_t N, class Type>
-struct Angles
+void AnglesLookUp()
 {
-	Angles() { Fill(this); }
-	float& operator[](const size_t i)
-	{
-		if (i > 360)
-			return ms_angles[i - 360];
-		else
-			return ms_angles[i];
+	Timer timer;
 
-	}
-	const float& operator[](const size_t i) const
-	{
-		if (i > 360)
-			return ms_angles[i - 360];
-		else
-			return ms_angles[i];
-	}
+	double times[6] = {};
+	QueryPerformanceFrequency(&qpc_freq);
+	timer_multiplier = (double)qpc_freq.QuadPart;
+
+	TimerFunc(times[0], LookUpFunc);
+	TimerFunc(times[0], LookUpFunc);
+	TimerFunc(times[0], LookUpFunc);
+
+	TimerFunc(times[0], PureLookUp);
+	TimerFunc(times[1], LookUp);
+	TimerFunc(times[2], SinPrint);
+
+	TimerFunc(times[5], SinPrint);
+	TimerFunc(times[4], LookUp);
+	TimerFunc(times[3], PureLookUp);
+
+	std::cout << "Time for Pure lookup: " << times[0] << std::endl;
+	std::cout << "Time for lookup: " << times[1] << std::endl;
+	std::cout << "Time for sin() func: " << times[2] << std::endl;
+	std::cout << std::endl;
+	std::cout << "Time for rev Pure lookup: " << times[3] << std::endl;
+	std::cout << "Time for rev lookup: " << times[4] << std::endl;
+	std::cout << "Time for rev sin() func: " << times[5] << std::endl;
+}
+
+void FactorialTemplateFunc()
+{
+	double times;
+	TimerFunc(times, LookUpFunc);
+	TimerFunc(times, LookUpFunc);
+	TimerFunc(times, LookUpFunc);
+	Timer timer;
+	unsigned long long factorial = 1;
+	constexpr int max = 40;
+	std::cout << "warm up" << " = " << Factorial<max>::result << std::endl;
+	std::cout << "warm up" << " = " << Factorial<max>::result << std::endl;
+	std::cout << "warm up" << " = " << Factorial<max>::result << std::endl;
+	std::cout << "warm up" << " = " << Factorial<max>::result << std::endl;
 	
-	template <size_t I = 0>
-	static void Fill(Angles* ptr)
-	{
-		// Fill out our angle array
-		ptr->ms_angles[I] = AngleFinder<static_cast<int>(I), Type>()();
-		// recurse upwards
-		if constexpr (I + 1 < N + 1) Angles<N, Type>::Fill<I + 1>(ptr);
-	}
-private:
-	std::array<float, N + 1> ms_angles;
-};
+	timer.Start();
+	std::cout << "Factorial of " << "warm up" << " = " << Factorial<max>::result << std::endl;
+	timer.StopPrint();
 
-static Angles<360, Sin> s_sinAngles;
-static Angles<360, Cos> s_cosAngles;
+	timer.Start();
+	std::cout << "Factorial of test " << max << " = " << 18376134811363311616 << std::endl;
+	timer.StopPrint();
+	
+	timer.Start();
+	std::cout << "Factorial of template with " << max << " = " << Factorial<max>::result << std::endl;
+	timer.StopPrint();
+
+	timer.Start();
+	std::cout << "Factorial of template with hard coded " << max << " = " << Factorial<40>::result << std::endl;
+	timer.StopPrint();
+	
+	timer.Start();
+	for (int i = 1; i <= max; ++i) {
+		factorial *= i;
+	}
+	std::cout << "Factorial of for loop " << max << " = " << factorial << std::endl;
+	timer.StopPrint();
+
+}
 
 int main(void)
-{
-	constexpr size_t testValue = 360;
-	std::cout << s_sinAngles[testValue] << std::endl;
-	std::cout << sinf(testValue) << std::endl;
-	
-	std::cout << s_cosAngles[testValue] << std::endl;
-	std::cout << cosf(testValue) << std::endl;
-	
+{	
+	//AnglesLookUp();
+	FactorialTemplateFunc();
 	return EXIT_SUCCESS;
 }
