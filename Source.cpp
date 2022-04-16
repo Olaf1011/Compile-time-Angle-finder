@@ -2,51 +2,70 @@
 #include <iostream>
 #include <array>
 
+class Sin;
+class Cos;
 
-struct Angles
-{
-	float& operator[](size_t&& i) { return ms_angles[i + 1]; }
-	const float& operator[](size_t&& i) const { return ms_angles[i + 1]; }
-private:
-	std::array<float, 360> ms_angles;
-};
-
-static Angles s_angles;
-
-
-template<int A>
+template<int A, class Type>
 struct AngleFinder;
 
 template<int A>
-struct AngleFinder
+struct AngleFinder<A, Sin>
 {
 	const float value = sinf(static_cast<float>(A));
 	float operator()() const { return value; }
 };
 
-template <size_t N>
-struct ForEach {
+template<int A>
+struct AngleFinder<A, Cos>
+{
+	const float value = cosf(static_cast<float>(A));
+	float operator()() const { return value; }
+};
 
-	template <size_t I>
-	static void item() {
 
-		// Fill out our angle array
-		s_angles[I - 1] = AngleFinder<static_cast<int>(I)>()();
-		// recurse upwards
-		if constexpr (I + 1 < N) ForEach<N>::item<I + 1>();
+template <size_t N, class Type>
+struct Angles
+{
+	Angles() { Fill(this); }
+	float& operator[](const size_t i)
+	{
+		if (i > 360)
+			return ms_angles[i - 360];
+		else
+			return ms_angles[i];
 
 	}
+	const float& operator[](const size_t i) const
+	{
+		if (i > 360)
+			return ms_angles[i - 360];
+		else
+			return ms_angles[i];
+	}
+	
+	template <size_t I = 0>
+	static void Fill(Angles* ptr)
+	{
+		// Fill out our angle array
+		ptr->ms_angles[I] = AngleFinder<static_cast<int>(I), Type>()();
+		// recurse upwards
+		if constexpr (I + 1 < N + 1) Angles<N, Type>::Fill<I + 1>(ptr);
+	}
+private:
+	std::array<float, N + 1> ms_angles;
 };
+
+static Angles<360, Sin> s_sinAngles;
+static Angles<360, Cos> s_cosAngles;
 
 int main(void)
 {
-	ForEach<360>::item<0>();
-
-	std::cout << s_angles[20] << std::endl;
-
-	std::cout << sinf(21) << std::endl;
+	constexpr size_t testValue = 360;
+	std::cout << s_sinAngles[testValue] << std::endl;
+	std::cout << sinf(testValue) << std::endl;
 	
-	system("pause");
+	std::cout << s_cosAngles[testValue] << std::endl;
+	std::cout << cosf(testValue) << std::endl;
 	
 	return EXIT_SUCCESS;
 }
