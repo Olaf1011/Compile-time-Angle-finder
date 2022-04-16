@@ -4,7 +4,7 @@
 template<int n>
 struct Factorial
 {
-    static constexpr long long result = Factorial<n - 1>::result * n;
+    static constexpr unsigned long long result = Factorial<n - 1>::result * n;
 };
 template<>
 struct Factorial<1>
