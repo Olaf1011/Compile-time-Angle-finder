@@ -1,71 +1,58 @@
 #include <algorithm>
 #include <iostream>
 #include <array>
+#include <windows.h>
+#include "Timer.h"
+#include "Angles.hpp"
 
-class Sin;
-class Cos;
+static LARGE_INTEGER qpc_freq;
+static LARGE_INTEGER qpc_begin;
+static LARGE_INTEGER qpc_end;
+static double timer_multiplier;
 
-template<int A, class Type>
-struct AngleFinder;
 
-template<int A>
-struct AngleFinder<A, Sin>
+void TimerFunc(double& timeSave, void(*func)(int))
 {
-	const float value = sinf(static_cast<float>(A));
-	float operator()() const { return value; }
-};
-
-template<int A>
-struct AngleFinder<A, Cos>
-{
-	const float value = cosf(static_cast<float>(A));
-	float operator()() const { return value; }
-};
-
-
-template <size_t N, class Type>
-struct Angles
-{
-	Angles() { Fill(this); }
-	float& operator[](const size_t i)
+	QueryPerformanceCounter(&qpc_begin);
+	for(int j = 0; j < 10; ++j)
 	{
-		if (i > 360)
-			return ms_angles[i - 360];
-		else
-			return ms_angles[i];
+		for (int i = 0; i < 360; ++i)
+		{
+			func(i);
+		}
+	}
+	QueryPerformanceCounter(&qpc_end);
 
-	}
-	const float& operator[](const size_t i) const
-	{
-		if (i > 360)
-			return ms_angles[i - 360];
-		else
-			return ms_angles[i];
-	}
-	
-	template <size_t I = 0>
-	static void Fill(Angles* ptr)
-	{
-		// Fill out our angle array
-		ptr->ms_angles[I] = AngleFinder<static_cast<int>(I), Type>()();
-		// recurse upwards
-		if constexpr (I + 1 < N + 1) Angles<N, Type>::Fill<I + 1>(ptr);
-	}
-private:
-	std::array<float, N + 1> ms_angles;
-};
-
-static Angles<360, Sin> s_sinAngles;
-static Angles<360, Cos> s_cosAngles;
+	timeSave = (double)(qpc_end.QuadPart - qpc_begin.QuadPart) / timer_multiplier;
+}
 
 int main(void)
 {
-	constexpr size_t testValue = 360;
-	std::cout << s_sinAngles[testValue] << std::endl;
-	std::cout << sinf(testValue) << std::endl;
+	Timer timer;
+
+	double times[6] = {};
+	QueryPerformanceFrequency(&qpc_freq);
+	timer_multiplier = (double)qpc_freq.QuadPart;
+
+	TimerFunc(times[0], LookUpFunc);
+	TimerFunc(times[0], LookUpFunc);
+	TimerFunc(times[0], LookUpFunc);	
 	
-	std::cout << s_cosAngles[testValue] << std::endl;
-	std::cout << cosf(testValue) << std::endl;
+	TimerFunc(times[0], LookUpFunc);
+	TimerFunc(times[1], LookUp);
+	TimerFunc(times[2], SinPrint);	
+
+	TimerFunc(times[5], SinPrint);
+	TimerFunc(times[4], LookUp);
+	TimerFunc(times[3], LookUpFunc);
+	
+	std::cout << "Time for lookup with func: " << times[0] << std::endl;
+	std::cout << "Time for lookup: " << times[1] << std::endl;
+	std::cout << "Time for sin() func: " << times[2] << std::endl;
+	std::cout << std::endl;
+	std::cout << "Time for rev lookup with func: " << times[3] << std::endl;
+	std::cout << "Time for rev lookup: " << times[4] << std::endl;
+	std::cout << "Time for rev sin() func: " << times[5] << std::endl;
 	
 	return EXIT_SUCCESS;
 }
