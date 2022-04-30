@@ -1,13 +1,13 @@
 #pragma once
 
 typedef unsigned long long ull;
-typedef long double ld;
+
 
 template<int n>
 struct Factorial
 {
     static constexpr ull value = Factorial<n - 1>::value * n;
-    constexpr ull operator()() { return value; }
+    constexpr ull operator()() const { return value; }
     constexpr operator double() const { return  value; }
 
 };
