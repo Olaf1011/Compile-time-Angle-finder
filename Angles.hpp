@@ -1,32 +1,18 @@
 #pragma once
 
 #include "Factorial.hpp"
+#include "Power.hpp"
 
 constexpr double PI = 3.14159265;
 class SinAngle;
 class CosAngle;
-class Degrees;
-class Radians;
-
-template<auto x, int power>
-struct Pow
-{
-	constexpr auto operator()() const { return x * Pow<x, power - 1>()(); }
-};
-
-template<auto x>
-struct Pow<x, 0>
-{
-	constexpr auto operator()() const { return 1.0; }
-};
 
 template<int X, class Type>
-class AngleFinder;
+struct AngleFinder;
 
 template<int X>
-class AngleFinder<X, SinAngle>
+struct AngleFinder<X, SinAngle>
 {
-public:
 	constexpr double operator()() const {
 		if constexpr (X > 360)
 			return AngleFinder<X - 360, SinAngle>()();
@@ -49,9 +35,8 @@ public:
 };
 
 template<int X>
-class AngleFinder<X, CosAngle>
+struct AngleFinder<X, CosAngle>
 {
-public:
 	constexpr double operator()() const {
 		if constexpr (X > 360)
 			return AngleFinder<X - 360, CosAngle>()();

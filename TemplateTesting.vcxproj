@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CosLookUp.hpp" />
+    <ClInclude Include="Power.hpp" />
     <ClInclude Include="SinLookUp.hpp" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
