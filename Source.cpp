@@ -104,9 +104,52 @@ void FactorialTemplateFunc()
 
 }
 
+
 int main(void)
-{	
+{
+
+	//constexpr Angles<20, Sin> values;
+	
+	constexpr double Y = s_sinManualAngles[1];
+	std::cout << Y << std::endl;
+	constexpr double test = AngleFinder<20, Sin>::value;
 	//AnglesLookUp();
-	FactorialTemplateFunc();
+	//FactorialTemplateFunc();
+	double times;
+	TimerFunc(times, LookUpFunc);
+	TimerFunc(times, LookUpFunc);
+	TimerFunc(times, LookUpFunc);
+	Timer timer;
+	constexpr int max = 5;
+	std::cout << "warm up" << " = " << Factorial<max>::result << std::endl;
+	std::cout << "warm up" << " = " << Factorial<max>::result << std::endl;
+	std::cout << "warm up" << " = " << Factorial<max>::result << std::endl;
+	std::cout << "warm up" << " = " << Factorial<max>::result << std::endl;
+	//timer.Start();
+	//std::cout << "Template " << AngleFinder<Factorial<5>::result, Sin>::value << std::endl;
+	//timer.StopPrint();
+
+	//timer.Start();
+	//unsigned long long factorial = 1;
+	//for (int i = 1; i <= max; ++i) {
+	//	factorial *= i;
+	//}
+	//std::cout << "Sin + For loop: " << sin((double)factorial * PI / 180.0) << std::endl;
+	//timer.StopPrint();
+	timer.Start();
+	unsigned long long factorial = 1;
+	for (int i = 1; i <= max; ++i) {
+		factorial *= i;
+	}
+	std::cout << "Sin + For loop: " << (sin((double)factorial * PI / 180.0) * 10.0) / (sin(30 * PI / 180.0) + 10.0) << std::endl;
+	timer.StopPrint();
+	
+	timer.Start();
+	constexpr double x = (AngleFinder<Factorial<max>::result, Sin>::value * 10.0) / (AngleFinder<30, Sin>::value + 10.0);
+	std::cout << "Template " << x << std::endl;
+	timer.StopPrint();
+	
+
+	
 	return EXIT_SUCCESS;
 }

@@ -25,15 +25,20 @@ struct AngleFinder<X, Sin>
 private:
 	static constexpr double x = static_cast<double>(X) * PI / 180.0;
 public:
-	static constexpr double value = x - (x * x * x) / Factorial<3>::result + (x * x * x * x * x) / Factorial<5>::result - (x * x * x * x * x * x * x) / Factorial<7>::result;
+	static constexpr double value = x - (x * x * x) / Factorial<3>::result + 
+									(x * x * x * x * x) / Factorial<5>::result - 
+									(x * x * x * x * x * x * x) / Factorial<7>::result + 
+									(x * x * x * x * x * x * x * x * x) / Factorial<9>::result - 
+									(x * x * x * x * x * x * x * x * x * x * x) / Factorial<11>::result +
+									(x * x * x * x * x * x * x * x * x * x * x * x * x) / Factorial<13>::result;
 	constexpr double operator()() const { return value; }
 };
 
 //template<int A>
 //struct AngleFinder<A, Sin>
 //{
-//	const double value = sin(static_cast<double>(A) * PI / 180);
-//	double operator()() const { return value; }
+//	static double value = sin(static_cast<double>(A) * PI / 180);
+//	constexpr double operator()() const { return value; }
 //};
 
 template<int A>
@@ -47,25 +52,25 @@ struct AngleFinder<A, Cos>
 template <size_t N, class Type>
 struct Angles
 {
-	inline Angles() { Fill(this); };
-	inline double& operator[](const size_t i)
+	constexpr Angles() { Angles<N, Type>::Fill(); }
+	inline constexpr double& operator[](const size_t i)
 	{
-		return ms_angles[i];
+		return m_angles[i];
 	}
-	inline const double& operator[](const size_t i) const
+	inline constexpr const double& operator[](const size_t i) const
 	{
-		return ms_angles[i];
+		return m_angles[i];
 	}
 
 	template <size_t I = 0>
-	inline static constexpr void Fill(Angles* ptr)
+	inline constexpr void Fill()
 	{
 		// Fill out our angle array
-		ptr->ms_angles[I] = AngleFinder<static_cast<int>(I), Type>()();
+		m_angles[I] = AngleFinder<I, Type>::value;
 		// recurse upwards
-		if constexpr (I + 1 < N + 1) Angles<N, Type>::Fill<I + 1>(ptr);
+		if constexpr (I + 1 < N + 1) Angles<N, Type>::Fill<I + 1>();
 	}
-	std::array<double, N + 1> ms_angles;
+	double m_angles[N + 1];
 private:
 };
 
@@ -97,7 +102,7 @@ inline double LookUpFunc(int i)
 
 inline double LookUp(int i)
 {
-	return s_sinAngles.ms_angles[i];
+	return s_sinAngles.m_angles[i];
 }
 #include "LookUp.hpp"
 
