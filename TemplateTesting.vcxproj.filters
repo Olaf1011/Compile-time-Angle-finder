@@ -29,10 +29,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LookUp.hpp">
+    <ClInclude Include="SinLookUp.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CosLookUp.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

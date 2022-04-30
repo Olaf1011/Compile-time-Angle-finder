@@ -147,7 +147,8 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LookUp.hpp" />
+    <ClInclude Include="CosLookUp.hpp" />
+    <ClInclude Include="SinLookUp.hpp" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

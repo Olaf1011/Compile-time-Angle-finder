@@ -1,13 +1,10 @@
-#include <algorithm>
 #include <iostream>
 #include <array>
-#include <vector>
-
 
 #include "Timer.h"
+#include "SinLookUp.hpp"
+#include "CosLookUp.hpp"
 #include "Angles.hpp"
-
-
 
 int main(void)
 {	
@@ -15,7 +12,7 @@ int main(void)
 
 	constexpr ull test = Factorial<5>()();
 	
-	constexpr ld dtest = test / 0.45;
+	constexpr ld dtest = testing / 0.45;
 	
 	std::cout << "pow() Power of " << pow(5,	16) << std::endl;
 	std::cout << "mine  Power of " << Pow<5.0,	16>()() << std::endl;
@@ -27,18 +24,23 @@ int main(void)
 		factorial *= i;
 	}
 
-
-
+	std::cout << std::endl;
 	std::cout << "Fact() Power of " << factorial << std::endl;
 	std::cout << "mine  Power of " << Factorial<n>()() << std::endl;
 
-	constexpr double x = 30.0;
+	std::cout << std::endl;
+	constexpr double x = 90.0;
 
 	std::cout << cos(static_cast<double>(x) * PI / 180.0) << " Cos()" << std::endl;
 	std::cout << AngleFinder<(int)x, Cos>()() << " Mine" << std::endl;
+	std::cout << g_CosAngles[(int)x] << " Look up" << std::endl;
+	std::cout << std::endl;
+
 	std::cout << sin(static_cast<double>(x) * PI / 180.0) << " Sin()" << std::endl;
 	std::cout << AngleFinder<(int)x, Sin>()() << " Mine sin" << std::endl;
+	std::cout << g_SinAngles[(int)x] << " Look up" << std::endl;
+	std::cout << std::endl;
 
-	
+
 	return EXIT_SUCCESS;
 }

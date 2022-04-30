@@ -8,7 +8,6 @@ struct Factorial
 {
     static constexpr ull value = Factorial<n - 1>::value * n;
     constexpr ull operator()() { return value; }
-    constexpr operator int() const { return  value; }
     constexpr operator double() const { return  value; }
 
 };

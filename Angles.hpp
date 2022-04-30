@@ -1,8 +1,5 @@
 #pragma once
-#include <windows.h>
-#include <array>
-#include <iostream>
-#include <string>
+
 #include "Factorial.hpp"
 
 constexpr double PI = 3.14159265;
@@ -14,13 +11,13 @@ class Radians;
 template<double x, int power>
 struct Pow
 {
-	double operator()() { return x * Pow<x, power - 1>()(); }
+	constexpr double operator()() const { return x * Pow<x, power - 1>()(); }
 };
 
 template<double x>
 struct Pow<x, 0>
 {
-	double operator()() { return 1.0; }
+	constexpr double operator()() const { return 1.0; }
 };
 
 template<auto A, class Type, class Form = Degrees>
@@ -30,7 +27,8 @@ template<double x>
 class AngleFinder<x, Sin, Radians>
 {
 public:
-	constexpr double operator()() const { return x - Pow<x, 3>()()  / Factorial<3>()() +
+	constexpr double operator()() const {
+		return x - Pow<x, 3>()()  / Factorial<3>()() +
 													 Pow<x, 5>()()  / Factorial<5>()() -
 													 Pow<x, 7>()()  / Factorial<7>()() +
 													 Pow<x, 9>()()  / Factorial<9>()() -
@@ -50,7 +48,7 @@ template<double x>
 class AngleFinder<x, Cos, Radians>
 {
 public:
-	double operator()() const { return	1.0 -	Pow<x, 2>()() / Factorial<2>()() +
+	constexpr double operator()() const { return	1.0 -	Pow<x, 2>()() / Factorial<2>()() +
 												Pow<x, 4>()() / Factorial<4>()() -
 												Pow<x, 6>()() / Factorial<6>()() +
 												Pow<x, 8>()() / Factorial<8>()() -
