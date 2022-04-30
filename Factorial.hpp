@@ -1,19 +1,22 @@
 #pragma once
 
+typedef long long ull;
 
 template<int n>
 struct Factorial
 {
-    static constexpr unsigned long long result = Factorial<n - 1>::result * n;
-};
-template<>
-struct Factorial<1>
-{
-    static constexpr long long result = 1;
+    static constexpr ull value = Factorial<n - 1>::value * n;
+    constexpr ull operator()() { return Factorial<n - 1>::value * n; }
+    constexpr operator int() const { return  Factorial<n - 1>::value * n; }
+    constexpr operator double() const { return  Factorial<n - 1>::value * n; }
+
 };
 
 template<>
 struct Factorial<0>
 {
-    static constexpr long long result = 0;
+    static constexpr ull value = 1;
+    constexpr ull operator()() { return 1; }
+    constexpr operator int() const { return 1; }
+    constexpr operator double() const { return 1; }
 };
