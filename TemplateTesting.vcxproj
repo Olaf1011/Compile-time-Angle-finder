@@ -148,8 +148,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CosLookUp.hpp" />
+    <ClInclude Include="Geometric.hpp" />
     <ClInclude Include="Power.hpp" />
     <ClInclude Include="SinLookUp.hpp" />
+    <ClInclude Include="Sqrt.hpp" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

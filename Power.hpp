@@ -11,3 +11,4 @@ struct Pow<x, 0>
 {
 	constexpr auto operator()() const { return 1.0; }
 };
+

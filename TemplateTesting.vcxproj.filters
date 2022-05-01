@@ -41,5 +41,11 @@
     <ClInclude Include="Power.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Geometric.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sqrt.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

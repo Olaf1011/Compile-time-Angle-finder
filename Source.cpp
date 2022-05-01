@@ -1,13 +1,14 @@
 #include <iostream>
-#include <array>
 
 #include "Timer.h"
 #include "SinLookUp.hpp"
 #include "CosLookUp.hpp"
 #include "Angles.hpp"
+#include "Geometric.hpp"
+#include "Sqrt.hpp"
 
 int main(void)
-{	
+{
 	constexpr Factorial<5> testing;
 
 	constexpr ull test = Factorial<5>()();
@@ -41,6 +42,11 @@ int main(void)
 	std::cout << Sin<(int)(360.0 + x)>()() << " 450 sin" << std::endl;
 	std::cout << g_SinAngles[(int)x] << " Look up" << std::endl;
 	std::cout << std::endl;
+
+	constexpr int input = 9;
+
+
+	std::cout << pow(26, 0.5) << std::endl;
 
 
 	return EXIT_SUCCESS;
