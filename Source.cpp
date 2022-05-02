@@ -5,6 +5,7 @@
 #include "CosLookUp.hpp"
 #include "Angles.hpp"
 #include "Geometric.hpp"
+#include "Exponation.hpp"
 #include "Sqrt.hpp"
 
 int main(void)
@@ -43,11 +44,9 @@ int main(void)
 	std::cout << g_SinAngles[(int)x] << " Look up" << std::endl;
 	std::cout << std::endl;
 
-	constexpr int input = 9;
-
-
 	std::cout << pow(26, 0.5) << std::endl;
 
+	constexpr double exp = exponential<4>()();
 
 	return EXIT_SUCCESS;
 }

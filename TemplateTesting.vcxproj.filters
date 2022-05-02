@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\LookUp">
+      <UniqueIdentifier>{1af1ebf0-8c79-4248-ac18-86553aefe4eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -29,15 +32,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SinLookUp.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CosLookUp.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Power.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -45,6 +39,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sqrt.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CosLookUp.hpp">
+      <Filter>Header Files\LookUp</Filter>
+    </ClInclude>
+    <ClInclude Include="SinLookUp.hpp">
+      <Filter>Header Files\LookUp</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Exponation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
