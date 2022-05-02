@@ -5,7 +5,7 @@ template<int x, int power>
 struct Pow
 {
 	//Use recursive to calculate the answer to x^y
-	constexpr int operator()() const { return x * Pow<x, power - 1>()(); }
+	constexpr unsigned long long operator()() const { return x * Pow<x, power - 1>()(); }
 };
 
 template<double x, int power>
@@ -19,7 +19,7 @@ struct PowD
 template<int x>
 struct Pow<x, 0>
 {
-	constexpr int operator()() const { return 1; }
+	constexpr unsigned long long operator()() const { return 1; }
 };
 
 //The way to end the recursive loop.

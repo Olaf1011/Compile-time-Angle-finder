@@ -43,6 +43,7 @@ struct AngleFinder<X, SinAngle>
 template<int X>
 struct AngleFinder<X, CosAngle>
 {
+	static constexpr double value = 1;
 	//Using degrees to calculate the cosine.
 	constexpr double operator()() const {
 		//Check if the number is bigger than 360.
@@ -71,7 +72,9 @@ struct AngleFinder<X, CosAngle>
 						PowD<x, 12>()() / Factorial<12>()(); }
 };
 
+
 template<int X>
 using Cos = AngleFinder<X, CosAngle>;
 template<int X>
 using Sin = AngleFinder<X, SinAngle>;
+

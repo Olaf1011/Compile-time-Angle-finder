@@ -148,7 +148,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CosLookUp.hpp" />
+    <ClInclude Include="ExpoLookUp.hpp" />
     <ClInclude Include="Exponation.hpp" />
+    <ClInclude Include="FactorialLookUp.hpp" />
     <ClInclude Include="Power.hpp" />
     <ClInclude Include="SinLookUp.hpp" />
     <ClInclude Include="Sqrt.hpp" />

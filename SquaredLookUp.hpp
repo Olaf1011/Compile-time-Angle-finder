@@ -1,7 +1,7 @@
 #pragma once
 #include "Power.hpp"
 
-constexpr int g_SquaredLookUp[50]
+constexpr unsigned long long g_SquaredLookUp[50]
 {
 	Pow<1, 2>()(),
 	Pow<2, 2>()(),

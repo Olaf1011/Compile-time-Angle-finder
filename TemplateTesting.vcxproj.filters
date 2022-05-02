@@ -53,5 +53,11 @@
     <ClInclude Include="SquaredLookUp.hpp">
       <Filter>Header Files\LookUp</Filter>
     </ClInclude>
+    <ClInclude Include="ExpoLookUp.hpp">
+      <Filter>Header Files\LookUp</Filter>
+    </ClInclude>
+    <ClInclude Include="FactorialLookUp.hpp">
+      <Filter>Header Files\LookUp</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

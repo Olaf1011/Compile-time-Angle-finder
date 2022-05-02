@@ -6,6 +6,8 @@
 #include "Angles.hpp"
 #include "Exponation.hpp"
 #include "SquaredLookUp.hpp"
+#include "ExpoLookUp.hpp"
+#include "FactorialLookUp.hpp"
 #include "Sqrt.hpp"
 
 void Angles()
@@ -59,7 +61,62 @@ void Sqaured()
 	}
 	else
 	{
-		printf("%i^2 = %i Using a look up table\n%i^2 = %i using pow() function", value, g_SquaredLookUp[value - 1], value, static_cast<int>(pow(value, 2)));
+		printf("%i^2 = %llu Using a look up table\n%i^2 = %llu using pow() function", value, g_SquaredLookUp[value - 1], value, static_cast<ull>(pow(value, 2)));
+		std::cout << std::endl << std::endl << std::endl;
+	}
+}
+
+
+void Expo()
+{
+	int value = 0; //Default 0 to make sure it gets filled with a value
+	std::string inputValue;
+	char* pEnd = nullptr;
+
+	std::cout << "Input a value for e^x (Limited to 1 - 9)\nIf you want to calculate e^x and pick your own values\nUse function \"ManualInput()\" and input your own value\nInput: ";
+	std::cin >> inputValue;
+	value = std::strtol(inputValue.c_str(), &pEnd, 10);
+
+	system("CLS");
+
+	//Check for valid value.
+	if (value > 9 || value < 1)
+	{
+		std::cout << "Please put a space between your choice and the value or use a valid value\n\n" << std::endl;
+		Expo();
+	}
+	else
+	{
+		printf("e^%i = %lf Using a look up table\ne^%i = %lf using exp() function", value, g_ExpoLookUp[value - 1], value, exp(value));
+		std::cout << std::endl << std::endl << std::endl;
+	}
+}
+
+void FactorialFunc()
+{
+	int value = 0; //Default 0 to make sure it gets filled with a value
+	std::string inputValue;
+	char* pEnd = nullptr;
+
+	std::cout << "Input a value for x! (Limited to 1 - 20)\nIf you want to calculate x! and pick your own values\nUse function \"ManualInput()\" and input your own value\nInput: ";
+	std::cin >> inputValue;
+	value = std::strtol(inputValue.c_str(), &pEnd, 10);
+
+	system("CLS");
+
+	//Check for valid value.
+	if (value > 20 || value < 1)
+	{
+		std::cout << "Please put a space between your choice and the value or use a valid value\n\n" << std::endl;
+		FactorialFunc();
+	}
+	else
+	{
+		ull factorial = 1.0;
+		for (int i = 1; i <= value; ++i) {
+			factorial *= i;
+		}
+		printf("%i! = %llu Using a look up table\n%i! = %llu using for loop", value, g_FactorialLookUp[value - 1], value, factorial);
 		std::cout << std::endl << std::endl << std::endl;
 	}
 }
@@ -69,7 +126,7 @@ void Interface()
 	int input = 0;
 	std::string inputValue;
 	char* pEnd;
-	//Keep looping untill exit is called
+	//Keep looping until exit is called
 	while(input != 5)
 	{
 		std::cout << "Pick input:" << std::endl;
@@ -85,73 +142,65 @@ void Interface()
 		case 2:
 			Sqaured();
 			break;
+		case 3:
+			Expo();
+			break;
+		case 4:
+			FactorialFunc();
+			break;
 		}
 	}
 }
 
+//This will calculate the value at compile time, and even show you the value (on vs2022) of the answer when you hover over it.
 void ManualInput()
 {
-	//Input your manual values for x^y.
-	//This will calculate the value at compile time, and even show you the value (on vs2022) of the answer when you hover over it.
-	constexpr int x = 2;
-	constexpr int y = 2;
-	constexpr int answer = Pow<x, y>()();
-
-	std::cout << answer << std::endl;
-
-
-
-}
-
-void Testing()
-{
-	constexpr Factorial<5> testing;
-
-	constexpr ull test = Factorial<5>()();
-
-	std::cout << "pow() Power of " << pow(5, 16) << std::endl;
-	std::cout << "mine  Power of " << PowD<5, 16>()() << std::endl;
-
-	constexpr int n = 14;
-	long double factorial = 1.0;
-
-	for (int i = 1; i <= n; ++i) {
-		factorial *= i;
+	{
+		//Input your manual values for x^y.
+		constexpr int x = 5;
+		constexpr int y = 20;
+		constexpr unsigned long long answer = Pow<x, y>()();
+		printf("%i^%i = %llu\n", x, y, answer);
 	}
-
-	std::cout << std::endl;
-	std::cout << "Fact() Power of " << factorial << std::endl;
-	std::cout << "mine  Power of " << Factorial<n>()() << std::endl;
-
-	std::cout << std::endl;
-	constexpr double x = 180.0;
-
-	std::cout << cos(x * PI / 180.0) << " Cos()" << std::endl;
-	std::cout << Cos<(int)x>()() << " Mine" << std::endl;
-	std::cout << g_CosAngles[(int)x] << " Look up" << std::endl;
-	std::cout << std::endl;
-
-	std::cout << sin(x * PI / 180.0) << " Sin()" << std::endl;
-	std::cout << Sin<(int)x>()() << " Mine sin" << std::endl;
-	std::cout << Sin<(int)(360.0 + x)>()() << " 450 sin" << std::endl;
-	std::cout << g_SinAngles[(int)x] << " Look up" << std::endl;
-	std::cout << std::endl;
-
-	std::cout << pow(26, 0.5) << std::endl;
-
-	constexpr double exp = exponential<6>()();
+	{
+		//Input your manual values for x!.
+		constexpr int x = 5;
+		constexpr ull answer = Factorial<x>()();
+		printf("%i! = %llu\n", x, answer);
+	}
+	{
+		//Input your manual values for Sin(x) in degrees.
+		constexpr int x = 5;  // x in degrees
+		constexpr double answer = Sin<x>()();
+		printf("Sin(%i) = %f\n", x, answer);
+	}
+	{
+		//Input your manual values for Cos(x) in degrees.
+		constexpr int x = 5; // x in degrees
+		constexpr double answer = Cos<x>()();
+		printf("Cos(%i) = %f\n", x, answer);
+	}
+	{
+		//Input your manual values for e^x.
+		constexpr long double x = 5.0; // x in degrees
+		constexpr long double answer = Exponential<x>()();
+		printf("e^%lf, = %lf\n", x, answer);
+	}
 }
 
 int main(void)
 {
-
-	constexpr bool Manual = false; //Set to true if you want to run the manual input functions.
+	//Set to true if you want to run the manual input functions.
+	//Set to false to run the interface.
+	constexpr bool Manual = false;
 
 	if constexpr (Manual)
 	{
 		ManualInput();
 	}
-
-
+	else
+	{
+		Interface();
+	}
 	return EXIT_SUCCESS;
 }
