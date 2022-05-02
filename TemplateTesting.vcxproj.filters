@@ -35,9 +35,6 @@
     <ClInclude Include="Power.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Geometric.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sqrt.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -52,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="Exponation.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SquaredLookUp.hpp">
+      <Filter>Header Files\LookUp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

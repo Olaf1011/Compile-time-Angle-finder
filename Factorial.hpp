@@ -6,14 +6,13 @@ typedef unsigned long long ull;
 template<int n>
 struct Factorial
 {
-    static constexpr ull value = Factorial<n - 1>::value * n;
-    constexpr ull operator()() const { return value; }
-    constexpr operator double() const { return  value; }
+    //Use recursive to calculate the answer to factorial n.
+    constexpr ull operator()() const { return Factorial<n - 1>()() * n; }
 };
 
+//The way to end the recursive loop.
 template<>
 struct Factorial<0>
 {
-    static constexpr ull value = 1;
-    constexpr ull operator()() const { return value; }
+    constexpr ull operator()() const { return 1; }
 };

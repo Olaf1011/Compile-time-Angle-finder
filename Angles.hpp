@@ -31,12 +31,12 @@ struct AngleFinder<X, SinAngle>
 		//Convert degrees too radians as this formula uses radians. Do this after the checks for another small optimization.
 		constexpr double x = static_cast<double>(X) * PI / 180.0;
 		//Here we calculate the actual answer at compile time.
-		return x -	Pow<x, 3>()()  / Factorial<3>()() +
-					Pow<x, 5>()()  / Factorial<5>()() -
-					Pow<x, 7>()()  / Factorial<7>()() +
-					Pow<x, 9>()()  / Factorial<9>()() -
-					Pow<x, 11>()() / Factorial<11>()() +
-					Pow<x, 13>()() / Factorial<13>()();
+		return x -	PowD<x, 3>()()  / Factorial<3>()() +
+					PowD<x, 5>()()  / Factorial<5>()() -
+					PowD<x, 7>()()  / Factorial<7>()() +
+					PowD<x, 9>()()  / Factorial<9>()() -
+					PowD<x, 11>()() / Factorial<11>()() +
+					PowD<x, 13>()() / Factorial<13>()();
 	}
 };
 
@@ -63,12 +63,12 @@ struct AngleFinder<X, CosAngle>
 		//Convert degrees too radians as this formula uses radians. Do this after the checks for another small optimization.
 		constexpr double x = static_cast<double>(X) * PI / 180.0;
 		//Here we calculate the actual answer at compile time.
-		return	1.0 -	Pow<x, 2>()() / Factorial<2>()() +
-						Pow<x, 4>()() / Factorial<4>()() -
-						Pow<x, 6>()() / Factorial<6>()() +
-						Pow<x, 8>()() / Factorial<8>()() -
-						Pow<x, 10>()() / Factorial<10>()() +
-						Pow<x, 12>()() / Factorial<12>()(); }
+		return	1.0 -	PowD<x, 2>()() / Factorial<2>()() +
+						PowD<x, 4>()() / Factorial<4>()() -
+						PowD<x, 6>()() / Factorial<6>()() +
+						PowD<x, 8>()() / Factorial<8>()() -
+						PowD<x, 10>()() / Factorial<10>()() +
+						PowD<x, 12>()() / Factorial<12>()(); }
 };
 
 template<int X>
