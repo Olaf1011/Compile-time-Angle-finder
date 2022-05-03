@@ -29,7 +29,7 @@ void Angles()
 	if(value > 360 || value < 0)
 	{
 		std::cout << "Please put a space between your choice and the value or use a valid value\n\n" << std::endl;
-		Angles();
+		Angles(); //Recursive for getting the correct answer
 	}
 	else
 	{
@@ -57,7 +57,7 @@ void Sqaured()
 	if (value > 50 || value < 1)
 	{
 		std::cout << "Please put a space between your choice and the value or use a valid value\n\n" << std::endl;
-		Sqaured();
+		Sqaured(); //Recursive for getting the correct answer
 	}
 	else
 	{
@@ -83,7 +83,7 @@ void Expo()
 	if (value > 9 || value < 1)
 	{
 		std::cout << "Please put a space between your choice and the value or use a valid value\n\n" << std::endl;
-		Expo();
+		Expo(); //Recursive for getting the correct answer
 	}
 	else
 	{
@@ -108,11 +108,11 @@ void FactorialFunc()
 	if (value > 20 || value < 1)
 	{
 		std::cout << "Please put a space between your choice and the value or use a valid value\n\n" << std::endl;
-		FactorialFunc();
+		FactorialFunc(); //Recursive for getting the correct answer
 	}
 	else
 	{
-		ull factorial = 1.0;
+		ull factorial = 1;
 		for (int i = 1; i <= value; ++i) {
 			factorial *= i;
 		}
@@ -159,31 +159,31 @@ void ManualInput()
 		//Input your manual values for x^y.
 		constexpr int x = 5;
 		constexpr int y = 20;
-		constexpr unsigned long long answer = Pow<x, y>()();
+		constexpr unsigned long long answer = POW(x, y);
 		printf("%i^%i = %llu\n", x, y, answer);
 	}
 	{
 		//Input your manual values for x!.
 		constexpr int x = 5;
-		constexpr ull answer = Factorial<x>()();
+		constexpr ull answer = FACTORIAL(x);
 		printf("%i! = %llu\n", x, answer);
 	}
 	{
 		//Input your manual values for Sin(x) in degrees.
-		constexpr int x = 5;  // x in degrees
-		constexpr double answer = Sin<x>()();
-		printf("Sin(%i) = %f\n", x, answer);
+		constexpr int x = 30;  // x in degrees
+		constexpr long double answer = SIN(x);
+		printf("Sin(%i) = %lf\n", x, answer);
 	}
 	{
 		//Input your manual values for Cos(x) in degrees.
-		constexpr int x = 5; // x in degrees
-		constexpr double answer = Cos<x>()();
+		constexpr int x = 90; // x in degrees
+		constexpr double answer = COS(x);
 		printf("Cos(%i) = %f\n", x, answer);
 	}
 	{
 		//Input your manual values for e^x.
 		constexpr long double x = 5.0; // x in degrees
-		constexpr long double answer = Exponential<x>()();
+		constexpr long double answer = EXP(x);
 		printf("e^%lf, = %lf\n", x, answer);
 	}
 }
@@ -192,7 +192,7 @@ int main(void)
 {
 	//Set to true if you want to run the manual input functions.
 	//Set to false to run the interface.
-	constexpr bool Manual = false;
+	constexpr bool Manual = true;
 
 	if constexpr (Manual)
 	{

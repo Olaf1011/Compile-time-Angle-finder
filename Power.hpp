@@ -5,26 +5,29 @@ template<int x, int power>
 struct Pow
 {
 	//Use recursive to calculate the answer to x^y
-	constexpr unsigned long long operator()() const { return x * Pow<x, power - 1>()(); }
+	static constexpr unsigned long long value = x * Pow<x, power - 1>::value;
 };
 
-template<double x, int power>
+template<long double x, int power>
 struct PowD
 {
 	//Use recursive to calculate the answer to x^y
-	constexpr double operator()() const { return x * PowD<x, power - 1>()(); }
+	static constexpr long double value = x * PowD<x, power - 1>::value;
 };
 
 //The way to end the recursive loop.
 template<int x>
 struct Pow<x, 0>
 {
-	constexpr unsigned long long operator()() const { return 1; }
+	static constexpr unsigned long long  value = 1;
 };
 
 //The way to end the recursive loop.
-template<double x>
+template<long double x>
 struct PowD<x, 0>
 {
-	constexpr double operator()() const { return 1.0; }
+	static constexpr long double value = 1.0;
 };
+
+#define POW(x, y) Pow<x, y>::value
+#define POWD(x, y) PowD<x, y>::value

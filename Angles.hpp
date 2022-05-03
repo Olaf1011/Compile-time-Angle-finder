@@ -8,73 +8,74 @@ class SinAngle;
 class CosAngle;
 
 template<int X, class Type>
-struct AngleFinder;
+class AngleFinder;
 
 template<int X>
-struct AngleFinder<X, SinAngle>
+class AngleFinder<X, SinAngle>
 {
-	constexpr double operator()() const {
-		//Check if the number is bigger than 360.
-		//Use recursive to decrease the number and check again.
-		//Mostly used to keep our radians within the normal limits.
+protected:
+	friend class AngleFinder <X - 360, SinAngle>; //An ugly fix to allow for hiding variables and not making the visible for the end user
+	friend class AngleFinder <X + 360, SinAngle>;
+	//Check if the number is bigger than 360.
+	//Use recursive to decrease the number and check again.
+	//Mostly used to keep our radians within the normal limits.
+	static constexpr unsigned Reducer() {
 		if constexpr (X > 360)
-			return AngleFinder<X - 360, SinAngle>()();
-
-		//Check for values that should create a 0. As the normal cos() function, including this formula aren't precise enough to get to 0.
-		if constexpr (X == 180 || X == 360 || X == 0)
-			return 0.0;
-		//Some small optimization as we already know the answer for these.
-		else if constexpr (X == 90)
-			return 1.0;
-		else if constexpr (X == 270)
-			return -1.0;
-		//Convert degrees too radians as this formula uses radians. Do this after the checks for another small optimization.
-		constexpr double x = static_cast<double>(X) * PI / 180.0;
-		//Here we calculate the actual answer at compile time.
-		return x -	PowD<x, 3>()()  / Factorial<3>()() +
-					PowD<x, 5>()()  / Factorial<5>()() -
-					PowD<x, 7>()()  / Factorial<7>()() +
-					PowD<x, 9>()()  / Factorial<9>()() -
-					PowD<x, 11>()() / Factorial<11>()() +
-					PowD<x, 13>()() / Factorial<13>()();
+			return AngleFinder<X - 360, SinAngle>::Reducer();
+		else if constexpr (X < -360)
+			return AngleFinder<X + 360, SinAngle>::Reducer();
+		else
+			return X;
 	}
+	static constexpr int reducer = Reducer();
+	//Convert degrees too radians as this formula uses radians.
+	static constexpr double x = static_cast<double>(reducer) * PI / 180.0;
+public:
+	//Here we calculate the actual answer at compile time.
+	//Check for values that should create a 0. As the normal cos() function, including this formula aren't precise enough to get to 0.
+	static constexpr long double value = reducer == 180 || reducer == 360 || reducer == 0 ? 0.0 :
+										x - POWD(x, 3) / FACTORIAL(3) +
+											POWD(x, 5) / FACTORIAL(5) -
+											POWD(x, 7) / FACTORIAL(7) +
+											POWD(x, 9) / FACTORIAL(9) -
+											POWD(x, 11) / FACTORIAL(11) +
+											POWD(x, 13) / FACTORIAL(13);
 };
 
+
 template<int X>
-struct AngleFinder<X, CosAngle>
+class AngleFinder<X, CosAngle>
 {
-	static constexpr double value = 1;
-	//Using degrees to calculate the cosine.
-	constexpr double operator()() const {
-		//Check if the number is bigger than 360.
-		//Use recursive to decrease the number and check again.
-		//Mostly used to keep our radians within the normal limits.
+protected:
+	friend class AngleFinder <X - 360, CosAngle>; //An ugly fix to allow for hiding variables and not making the visible for the end user
+	friend class AngleFinder <X + 360, CosAngle>;
+	//Check if the number is bigger than 360.
+	//Use recursive to decrease the number and check again.
+	//Mostly used to keep our radians within the normal limits.
+	static constexpr unsigned Reducer() {
 		if constexpr (X > 360)
-			return AngleFinder<X - 360, CosAngle>()();
-
-		//Check for values that should create a 0. As the normal cos() function, including this formula aren't precise enough to get to 0.
-		if constexpr (X == 90 || X == 270)
-			return 0.0;
-		//Some small optimization as we already know the answer for these.
-		else if constexpr (X == 0 || X == 360)
-			return 1.0;
-		else if constexpr (X == 180)
-			return -1.0;
-
-		//Convert degrees too radians as this formula uses radians. Do this after the checks for another small optimization.
-		constexpr double x = static_cast<double>(X) * PI / 180.0;
-		//Here we calculate the actual answer at compile time.
-		return	1.0 -	PowD<x, 2>()() / Factorial<2>()() +
-						PowD<x, 4>()() / Factorial<4>()() -
-						PowD<x, 6>()() / Factorial<6>()() +
-						PowD<x, 8>()() / Factorial<8>()() -
-						PowD<x, 10>()() / Factorial<10>()() +
-						PowD<x, 12>()() / Factorial<12>()(); }
+			return AngleFinder<X - 360, CosAngle>::Reducer();
+		else if constexpr (X < -360)
+			return AngleFinder<X + 360, CosAngle>::Reducer();
+		else
+			return X;
+	}
+	static constexpr int reducer = Reducer();
+	//static constexpr int reducer = Reducer();
+	//Convert degrees too radians as this formula uses radians.
+	static constexpr double x = static_cast<double>(reducer) * PI / 180.0;
+public:
+	//Here we calculate the actual answer at compile time.
+	//Check for values that should create a 0. As the normal cos() function, including this formula aren't precise enough to get to 0.
+	static constexpr long double value = reducer == 90 || reducer == 270 ? 0.0 :
+			1.0 -	POWD(x, 2) / FACTORIAL(2) +
+					POWD(x, 4) / FACTORIAL(4) -
+					POWD(x, 6) / FACTORIAL(6) +
+					POWD(x, 8) / FACTORIAL(8) -
+					POWD(x, 10) / FACTORIAL(10) +
+					POWD(x, 12) / FACTORIAL(12);
 };
 
-
-template<int X>
-using Cos = AngleFinder<X, CosAngle>;
-template<int X>
-using Sin = AngleFinder<X, SinAngle>;
+#define SIN(X) AngleFinder<X, SinAngle>::value
+#define COS(X) AngleFinder<X, CosAngle>::value
 
