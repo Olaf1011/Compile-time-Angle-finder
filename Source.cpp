@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include "Timer.h"
 #include "SinLookUp.hpp"
@@ -9,6 +10,8 @@
 #include "ExpoLookUp.hpp"
 #include "FactorialLookUp.hpp"
 #include "Sqrt.hpp"
+
+
 
 void Angles()
 {
@@ -152,7 +155,9 @@ void Interface()
 	}
 }
 
+
 //This will calculate the value at compile time, and even show you the value (on vs2022) of the answer when you hover over it.
+//!! You will sometimes have to rebuild the solution for things to take effect. !!
 void ManualInput()
 {
 	{
@@ -176,7 +181,7 @@ void ManualInput()
 	}
 	{
 		//Input your manual values for Cos(x) in degrees.
-		constexpr int x = 90; // x in degrees
+		constexpr int x = 50 + 24; // x in degrees
 		constexpr double answer = COS(x);
 		printf("Cos(%i) = %f\n", x, answer);
 	}
@@ -188,11 +193,199 @@ void ManualInput()
 	}
 }
 
+
+void EfficiencyTesting()
+{
+	Timer timer;
+
+	{
+		std::vector<long long unsigned> warmUp2;
+		warmUp2.reserve(1000 * 500);
+		for (int i = 0; i < 1000; ++i)
+		{
+			for (int j = 0; j < 500; ++j)
+				warmUp2.emplace_back(j * i);
+		}
+		warmUp2.clear();
+	}
+
+	constexpr int loopSizeI = 100000;
+	{
+		constexpr int loopSizeJ = 50;
+
+
+		std::vector<long long unsigned> squareVec;
+		std::vector<long long unsigned> squareVecRef;
+
+		squareVec.reserve(loopSizeI * loopSizeJ);
+		squareVecRef.reserve(loopSizeI * loopSizeJ);
+
+		printf("Squared Look Up: ");
+		timer.Start();
+
+		for (int i = 0; i < loopSizeI; ++i)
+		{
+			for (int j = 0; j < loopSizeJ; ++j)
+				squareVecRef.emplace_back(g_SquaredLookUp[j]);
+		}
+		timer.StopPrint();
+		squareVec.clear();
+
+
+		printf("Pow(x, 2): ");
+		timer.Start();
+		for (int i = 0; i < loopSizeI; ++i)
+		{
+			for (int j = 0; j < loopSizeJ; ++j)
+				squareVec.emplace_back(pow(j, 2));
+		}
+		timer.StopPrint();
+		squareVec.clear();
+	}
+
+	{
+		constexpr int loopSizeJ = 10;
+
+		std::vector<long double> expoVec;
+		std::vector<long double> expoVecRef;
+		expoVec.reserve(loopSizeI * loopSizeJ);
+		expoVecRef.reserve(loopSizeI * loopSizeJ);
+
+		printf("Expo look up: ");
+		timer.Start();
+		for (int i = 0; i < loopSizeI; ++i)
+		{
+			for (int j = 0; j < loopSizeJ; ++j)
+			{
+				expoVecRef.emplace_back(g_ExpoLookUp[j]);
+			}
+		}
+		timer.StopPrint();
+
+		expoVecRef.clear();
+
+		printf("Exp(x): ");
+		timer.Start();
+		for (int i = 0; i < loopSizeI; ++i)
+		{
+			for (int j = 0; j < loopSizeJ; ++j)
+			{
+				expoVec.emplace_back(exp(j));
+			}
+		}
+		timer.StopPrint();
+		expoVec.clear();
+	}
+
+	{
+		constexpr int loopSizeJ = 360;
+
+
+		std::vector<double> sinVec;
+		std::vector<double> sinVecRef;
+
+		sinVec.reserve(loopSizeI * loopSizeJ);
+		sinVecRef.reserve(loopSizeI * loopSizeJ);
+
+		printf("Sin Look Up: ");
+		timer.Start();
+
+		for (int i = 0; i < loopSizeI; ++i)
+		{
+			for (int j = 0; j < loopSizeJ; ++j)
+				sinVecRef.emplace_back(g_SinAngles[j]);
+		}
+		timer.StopPrint();
+		sinVec.clear();
+
+
+		printf("Sin(x): ");
+		timer.Start();
+		for (int i = 0; i < loopSizeI; ++i)
+		{
+			for (int j = 0; j < loopSizeJ; ++j)
+				sinVec.emplace_back(sin(j));
+		}
+		timer.StopPrint();
+		sinVec.clear();
+	}
+
+	{
+		constexpr int loopSizeJ = 360;
+
+
+		std::vector<double> cosVec;
+		std::vector<double> cosVecRef;
+		cosVec.reserve(loopSizeI * loopSizeJ);
+		cosVecRef.reserve(loopSizeI * loopSizeJ);
+
+		printf("Cos Look Up: ");
+		timer.Start();
+
+		for (int i = 0; i < loopSizeI; ++i)
+		{
+			for (int j = 0; j < loopSizeJ; ++j)
+				cosVecRef.emplace_back(g_CosAngles[j]);
+		}
+		timer.StopPrint();
+		cosVec.clear();
+
+
+		printf("Cos(x): ");
+		timer.Start();
+		for (int i = 0; i < loopSizeI; ++i)
+		{
+			for (int j = 0; j < loopSizeJ; ++j)
+				cosVec.emplace_back(cos(j));
+		}
+		timer.StopPrint();
+		cosVec.clear();
+	}
+	{
+		constexpr int loopSizeJ = 20;
+
+
+		std::vector<long long unsigned> facVec;
+		std::vector<long long unsigned> facVecRef;
+
+		facVec.reserve(loopSizeI * loopSizeJ);
+		facVecRef.reserve(loopSizeI * loopSizeJ);
+
+		printf("Factorial look up: ");
+		timer.Start();
+
+		for (int i = 0; i < loopSizeI; ++i)
+		{
+			for (int j = 0; j < loopSizeJ; ++j)
+				facVecRef.emplace_back(g_FactorialLookUp[j]);
+		}
+		timer.StopPrint();
+		facVec.clear();
+
+
+		printf("For loop fact(x): ");
+		timer.Start();
+		for (int i = 0; i < loopSizeI; ++i)
+		{
+			for (int j = 0; j < loopSizeJ; ++j)
+			{
+				ull factorial = 1;
+				for (int k = 1; k <= j; ++k) {
+					factorial *= k;
+				}
+				facVec.emplace_back(factorial);
+			}
+		}
+		timer.StopPrint();
+		facVec.clear();
+	}
+}
+
 int main(void)
 {
 	//Set to true if you want to run the manual input functions.
 	//Set to false to run the interface.
-	constexpr bool Manual = true;
+	constexpr bool Manual = false;
 
 	if constexpr (Manual)
 	{
@@ -202,5 +395,6 @@ int main(void)
 	{
 		Interface();
 	}
+	
 	return EXIT_SUCCESS;
 }

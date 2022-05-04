@@ -19,7 +19,7 @@ protected:
 	//Check if the number is bigger than 360.
 	//Use recursive to decrease the number and check again.
 	//Mostly used to keep our radians within the normal limits.
-	static constexpr unsigned Reducer() {
+	static constexpr int Reducer() {
 		if constexpr (X > 360)
 			return AngleFinder<X - 360, SinAngle>::Reducer();
 		else if constexpr (X < -360)
@@ -52,7 +52,8 @@ protected:
 	//Check if the number is bigger than 360.
 	//Use recursive to decrease the number and check again.
 	//Mostly used to keep our radians within the normal limits.
-	static constexpr unsigned Reducer() {
+	static constexpr int Reducer()
+	{
 		if constexpr (X > 360)
 			return AngleFinder<X - 360, CosAngle>::Reducer();
 		else if constexpr (X < -360)
@@ -61,7 +62,6 @@ protected:
 			return X;
 	}
 	static constexpr int reducer = Reducer();
-	//static constexpr int reducer = Reducer();
 	//Convert degrees too radians as this formula uses radians.
 	static constexpr double x = static_cast<double>(reducer) * PI / 180.0;
 public:
