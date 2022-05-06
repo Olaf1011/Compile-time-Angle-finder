@@ -78,4 +78,3 @@ public:
 
 #define SIN(X) AngleFinder<X, SinAngle>::value
 #define COS(X) AngleFinder<X, CosAngle>::value
-
